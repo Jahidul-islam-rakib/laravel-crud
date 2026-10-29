@@ -22,15 +22,30 @@ class PostController extends Controller
 
         ]);
 
+        //upload image
+        $request->image=null;
+        if (isset($request->image))
+            {
+                $imageName=time().'.'.$request->image->extension();
+                $request->image->move(public_path('images'),$imageName);
+            }
+
+        //add new post
         $post = new post;
 
         $post->name= $request->name;
         $post->description = $request->description;
-        $post->image = $request->image;
+        $post->image = $imageName;
 
         $post->save();
 
         //return redirect()->back();
         return redirect()->route('home')->with('success','your post has been added successfully');
+    }
+
+    public function editData($id)
+    {
+        //dd($id);
+        return view('edit');
     }
 }
